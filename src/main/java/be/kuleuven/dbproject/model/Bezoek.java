@@ -41,12 +41,12 @@ public class Bezoek {
             joinColumns = @JoinColumn(name = "bezoekID"),
             inverseJoinColumns = @JoinColumn(name = "bijdrageID")
     )
-    private List<Boek> bijdragesTijdensBezoek;
+    private List<Bijdrage> bijdragesTijdensBezoek;
 
     public Bezoek(){
 
     }
-    public Bezoek(Bezoeker bezoeker, Museum museum, LocalDate datum, List<Boek> geleendeBoeken, List<Boek> geleendeGames, List<Boek> bijdragesTijdensBezoek) {
+    public Bezoek(Bezoeker bezoeker, Museum museum, LocalDate datum, List<Boek> geleendeBoeken, List<Boek> geleendeGames, List<Bijdrage> bijdragesTijdensBezoek) {
         this.bezoeker = bezoeker;
         this.museum = museum;
         this.datum = datum;
@@ -80,11 +80,21 @@ public class Bezoek {
         return geleendeGames;
     }
 
-    public List<Boek> getBijdragesTijdensBezoek() {
+    public List<Bijdrage> getBijdragesTijdensBezoek() {
         return bijdragesTijdensBezoek;
     }
 
     public void setMuseum(Museum museum) {
         this.museum = museum;
+    }
+
+    public float getTotaleBedrag(){
+        float totaalBedrag = 0.0f;
+
+        for (Bijdrage bijdrage : bijdragesTijdensBezoek) {
+            totaalBedrag += bijdrage.getBedrag();
+        }
+
+        return totaalBedrag;
     }
 }

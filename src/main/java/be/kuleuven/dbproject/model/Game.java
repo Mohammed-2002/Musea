@@ -1,6 +1,7 @@
 package be.kuleuven.dbproject.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,16 @@ public class Game {
         this.console = console;
         this.bezoeken = bezoeken;
         this.uitgeleend = uitgeleend;
+    }
+    public Game(Museum museum, String developer, int publicatiejaar, float waarde, String naam, Console console) {
+        this.museum = museum;
+        this.developer = developer;
+        this.publicatiejaar = publicatiejaar;
+        this.waarde = waarde;
+        this.naam = naam;
+        this.console = console;
+        this.bezoeken = new ArrayList<>();
+        this.uitgeleend = false;
     }
 
     public int getGameID() {

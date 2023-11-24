@@ -1,6 +1,7 @@
 package be.kuleuven.dbproject.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,6 +43,16 @@ public class Boek {
         this.waarde = waarde;
         this.uitgeleend = uitgeleend;
         this.bezoeken = bezoeken;
+    }
+    public Boek(String naam, String auteur, int publicatiejaar, String uitgever, Museum museum, float waarde) {
+        this.naam = naam;
+        this.auteur = auteur;
+        this.publicatiejaar = publicatiejaar;
+        this.uitgever = uitgever;
+        this.museum = museum;
+        this.waarde = waarde;
+        this.uitgeleend = false;
+        this.bezoeken = new ArrayList<>();
     }
 
     public int getBoekID() {

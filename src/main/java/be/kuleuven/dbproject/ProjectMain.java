@@ -1,6 +1,7 @@
 package be.kuleuven.dbproject;
 
 import be.kuleuven.dbproject.model.*;
+import be.kuleuven.dbproject.repository.MuseumRepository;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,8 +39,10 @@ public class ProjectMain extends Application {
         stage.setScene(scene);
         stage.show();
 
+
         var sessionFactory = Persistence.createEntityManagerFactory("be.kuleuven.dbproject");
         var entityManager = sessionFactory.createEntityManager();
+        var museumRepository = new MuseumRepository(entityManager);
 
         ArrayList<Medewerker> medewerkers = new ArrayList<>();
         ArrayList<Game> games = new ArrayList<>();
@@ -48,38 +51,33 @@ public class ProjectMain extends Application {
         ArrayList<Museum> musea =new ArrayList<>();
         Museum museum= new Museum("Museum van Tongeren","Tongeren", medewerkers,boeken,games,bezoeken);
 
-        entityManager.getTransaction().begin();
-        entityManager.persist(museum);
-        entityManager.getTransaction().commit();
+        museumRepository.save(museum);
 
-        entityManager.getTransaction().begin();
+
         Boek boek = new Boek("De liefde","Mohammed",1998,"UHasselt",museum,12,false,bezoeken);
 
         museum.voegBoekToe(boek);
-        entityManager.merge(museum);
-        entityManager.getTransaction().commit();
+        museumRepository.update(museum);
 
-        entityManager.getTransaction().begin();
+
+
         Game game = new Game(museum,"The fox",1999,13,"FIFA",Console.PS5,bezoeken,false);
         museum.voegGameToe(game);
-        entityManager.merge(museum);
-        entityManager.getTransaction().commit();
+        museumRepository.update(museum);
 
-        entityManager.getTransaction().begin();
+
         Medewerker medewerker = new Medewerker("Ased","Mail@gmail.com","blablabla", LocalDate.now(),musea);
         museum.voegMedewerkerToe(medewerker);
-        entityManager.merge(museum);
-        entityManager.getTransaction().commit();
+        museumRepository.update(museum);
 
 
 
-        var criteriaBuilder = entityManager.getCriteriaBuilder();
-        var query = criteriaBuilder.createQuery(Museum.class);
-        var testroot = query.from(Museum.class);
 
-        query.where(criteriaBuilder.equal(testroot.get("museumID"), "1"));
-        List<Museum> musea2 = entityManager.createQuery(query).getResultList();
-        System.out.println(musea2.get(0).getBoeken().get(0).getNaam());
+        Museum museum2 = museumRepository.findById(1);
+        System.out.println(museum2.getBoeken().get(0).getNaam());
+
+
+
     }
 
     public static void main(String[] args){

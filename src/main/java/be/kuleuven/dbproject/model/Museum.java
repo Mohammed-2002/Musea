@@ -1,5 +1,6 @@
 package be.kuleuven.dbproject.model;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 
@@ -39,6 +40,14 @@ public class Museum {
         this.boeken = boeken;
         this.games = games;
         this.bezoeken = bezoeken;
+    }
+    public Museum(String naam, String adres) {
+        this.naam = naam;
+        this.adres = adres;
+        this.medewerkers = new ArrayList<>();
+        this.boeken = new ArrayList<>();
+        this.games = new ArrayList<>();
+        this.bezoeken = new ArrayList<>();
     }
 
     public int getMuseumID() {
@@ -105,5 +114,15 @@ public class Museum {
         bezoeken.add(bezoek);
         bezoek.setMuseum(this);
     }
+    public float getTotaleOpbrengst() {
+        float totaleOpbrengst = 0.0f;
+
+        for (Bezoek bezoek : bezoeken) {
+            totaleOpbrengst += bezoek.getTotaleBedrag();
+        }
+
+        return totaleOpbrengst;
+    }
+
 
 }
