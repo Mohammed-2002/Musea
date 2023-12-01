@@ -18,7 +18,7 @@ public class Game {
     @Column(nullable = false)
     private int publicatiejaar;
     @Column(nullable = false)
-    private float waarde;
+    private double waarde;
     private String naam;
     @Column(nullable = false)
     private Console console;
@@ -32,7 +32,7 @@ public class Game {
     public Game(){
 
     }
-    public Game(Museum museum, String developer, int publicatiejaar, float waarde, String naam, Console console, List<Bezoek> bezoeken,boolean uitgeleend) {
+    public Game(Museum museum, String developer, int publicatiejaar, double waarde, String naam, Console console, List<Bezoek> bezoeken,boolean uitgeleend) {
         this.museum = museum;
         this.developer = developer;
         this.publicatiejaar = publicatiejaar;
@@ -42,7 +42,7 @@ public class Game {
         this.bezoeken = bezoeken;
         this.uitgeleend = uitgeleend;
     }
-    public Game(Museum museum, String developer, int publicatiejaar, float waarde, String naam, Console console) {
+    public Game(Museum museum, String developer, int publicatiejaar, double waarde, String naam, Console console) {
         this.museum = museum;
         this.developer = developer;
         this.publicatiejaar = publicatiejaar;
@@ -69,7 +69,7 @@ public class Game {
         return publicatiejaar;
     }
 
-    public float getWaarde() {
+    public double getWaarde() {
         return waarde;
     }
 
@@ -103,5 +103,10 @@ public class Game {
 
     public void setUitgeleend(boolean uitgeleend) {
         this.uitgeleend = uitgeleend;
+    }
+
+    private void voegGameToe(Museum museum){
+        museum.getGames().add(this);
+        this.museum = museum;
     }
 }

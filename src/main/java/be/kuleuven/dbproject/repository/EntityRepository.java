@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class EntityRepository<T> {
 
-    private final EntityManager entityManager;
+    protected final EntityManager entityManager;
 
     public EntityRepository(EntityManager entityManager) {
         this.entityManager = entityManager;

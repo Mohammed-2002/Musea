@@ -2,6 +2,7 @@ package be.kuleuven.dbproject.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,7 @@ public class Bezoeker {
         this.adres = adres;
         this.emailAdres = emailAdres;
         this.geboortedatum = geboortedatum;
+        this.bezoeken = new ArrayList<>();
     }
 
     public int getBezoekerID() {
@@ -62,5 +64,9 @@ public class Bezoeker {
 
     public void setEmailAdres(String emailAdres) {
         this.emailAdres = emailAdres;
+    }
+
+    public List<Bezoek> getBezoeken() {
+        return bezoeken;
     }
 }

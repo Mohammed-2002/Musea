@@ -1,6 +1,7 @@
 package be.kuleuven.dbproject.model;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,18 +24,18 @@ public class Bezoek {
 
     @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(
-            name = "GeleendeBoeken",
+            name = "geleendeBoeken",
             joinColumns = @JoinColumn(name = "bezoekID"),
             inverseJoinColumns = @JoinColumn(name = "boekID")
     )
     private List<Boek> geleendeBoeken;
     @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(
-            name = "GeleendeGames",
+            name = "geleendeGames",
             joinColumns = @JoinColumn(name = "bezoekID"),
             inverseJoinColumns = @JoinColumn(name = "gameID")
     )
-    private List<Boek> geleendeGames;
+    private List<Game> geleendeGames;
     @ManyToMany(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     @JoinTable(
             name = "BijdragesTijdensBezoek",
@@ -46,13 +47,16 @@ public class Bezoek {
     public Bezoek(){
 
     }
-    public Bezoek(Bezoeker bezoeker, Museum museum, LocalDate datum, List<Boek> geleendeBoeken, List<Boek> geleendeGames, List<Bijdrage> bijdragesTijdensBezoek) {
-        this.bezoeker = bezoeker;
-        this.museum = museum;
+    public Bezoek(Bezoeker bezoeker, Museum museum, LocalDate datum, List<Boek> geleendeBoeken, List<Game> geleendeGames, List<Bijdrage> bijdragesTijdensBezoek) {
+        this.geleendeBoeken =new ArrayList<>();
+        this.geleendeGames = new ArrayList<>();
+        this.bijdragesTijdensBezoek = new ArrayList<>();
+        kenBezoekerToe(bezoeker);
+        kenMuseumToe(museum);
         this.datum = datum;
-        this.geleendeBoeken = geleendeBoeken;
-        this.geleendeGames = geleendeGames;
-        this.bijdragesTijdensBezoek = bijdragesTijdensBezoek;
+        kenBoekenToe(geleendeBoeken);
+        kenGamesToe(geleendeGames);
+        kenBijdragesToe(bijdragesTijdensBezoek);
     }
 
 
@@ -76,7 +80,7 @@ public class Bezoek {
         return geleendeBoeken;
     }
 
-    public List<Boek> getGeleendeGames() {
+    public List<Game> getGeleendeGames() {
         return geleendeGames;
     }
 
@@ -97,4 +101,37 @@ public class Bezoek {
 
         return totaalBedrag;
     }
+
+    public void kenBezoekerToe(Bezoeker bezoeker){
+        bezoeker.getBezoeken().add(this);
+        this.bezoeker = bezoeker;
+    }
+    public void kenMuseumToe(Museum museum){
+        museum.getBezoeken().add(this);
+        this.museum = museum;
+    }
+
+    public void kenBoekenToe(List<Boek> boeken){
+        for(Boek boek: boeken) {
+            boek.getBezoeken().add(this);
+            boek.setUitgeleend(true);
+            geleendeBoeken.add(boek);
+        }
+    }
+    public void kenGamesToe(List<Game> games){
+        for(Game game: games) {
+            game.getBezoeken().add(this);
+            game.setUitgeleend(true);
+            geleendeGames.add(game);
+        }
+    }
+    public void kenBijdragesToe(List<Bijdrage> bijdrages){
+        for(Bijdrage bijdrage: bijdrages) {
+            bijdrage.getBezoeken().add(this);
+            bijdragesTijdensBezoek.add(bijdrage);
+        }
+    }
+
+
+
 }

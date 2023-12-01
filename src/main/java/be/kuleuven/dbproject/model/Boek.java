@@ -24,17 +24,17 @@ public class Boek {
     @JoinColumn(name = "museumID")
     private Museum museum;
     @Column(nullable = false)
-    private float waarde;
+    private double waarde;
     @Column(nullable = false)
     private boolean uitgeleend;
 
-    @ManyToMany(mappedBy = "geleendeBoeken", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "geleendeBoeken", fetch = FetchType.EAGER)
     private List<Bezoek> bezoeken;
 
     public Boek(){
 
     }
-    public Boek(String naam, String auteur, int publicatiejaar, String uitgever, Museum museum, float waarde, boolean uitgeleend, List<Bezoek> bezoeken) {
+    public Boek(String naam, String auteur, int publicatiejaar, String uitgever, Museum museum, double waarde, boolean uitgeleend, List<Bezoek> bezoeken) {
         this.naam = naam;
         this.auteur = auteur;
         this.publicatiejaar = publicatiejaar;
@@ -44,15 +44,15 @@ public class Boek {
         this.uitgeleend = uitgeleend;
         this.bezoeken = bezoeken;
     }
-    public Boek(String naam, String auteur, int publicatiejaar, String uitgever, Museum museum, float waarde) {
+    public Boek(String naam, String auteur, int publicatiejaar, String uitgever, Museum museum, double waarde) {
         this.naam = naam;
         this.auteur = auteur;
         this.publicatiejaar = publicatiejaar;
         this.uitgever = uitgever;
-        this.museum = museum;
         this.waarde = waarde;
         this.uitgeleend = false;
         this.bezoeken = new ArrayList<>();
+        VoegBoekToe(museum);
     }
 
     public int getBoekID() {
@@ -79,7 +79,7 @@ public class Boek {
         return museum;
     }
 
-    public float getWaarde() {
+    public double getWaarde() {
         return waarde;
     }
 
@@ -109,5 +109,10 @@ public class Boek {
 
     public void setBezoeken(List<Bezoek> bezoeken) {
         this.bezoeken = bezoeken;
+    }
+
+    private void VoegBoekToe(Museum museum){
+        this.museum = museum;
+        museum.getBoeken().add(this);
     }
 }

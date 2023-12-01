@@ -2,6 +2,7 @@ package be.kuleuven.dbproject.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,13 @@ public class Medewerker {
         this.wachtwoord = wachtwoord;
         this.geboortedatum = geboortedatum;
         this.musea = musea;
+    }
+    public Medewerker(String naam, String emailAdres, String wachtwoord, LocalDate geboortedatum) {
+        this.naam = naam;
+        this.emailAdres = emailAdres;
+        this.wachtwoord = wachtwoord;
+        this.geboortedatum = geboortedatum;
+        this.musea = new ArrayList<>();
     }
 
     public int getMedewerkerID() {
@@ -70,5 +78,9 @@ public class Medewerker {
 
     public void setMusea(List<Museum> musea) {
         this.musea = musea;
+    }
+    public void voegMuseumToe(Museum museum){
+        musea.add(museum);
+        museum.getMedewerkers().add(this);
     }
 }

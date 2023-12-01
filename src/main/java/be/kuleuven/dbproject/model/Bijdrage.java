@@ -1,6 +1,7 @@
 package be.kuleuven.dbproject.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,7 @@ public class Bijdrage {
     private int bijdrageID;
 
     @Column(nullable = false)
-    private float bedrag;
+    private double bedrag;
 
     @Column(nullable = false)
     private BetaalMethode betaalMethode;
@@ -24,9 +25,10 @@ public class Bijdrage {
     public Bijdrage(){
 
     }
-    public Bijdrage(float bedrag, BetaalMethode betaalMethode) {
+    public Bijdrage(double bedrag, BetaalMethode betaalMethode) {
         this.bedrag = bedrag;
         this.betaalMethode = betaalMethode;
+        this.bezoeken =new ArrayList<>();
 
     }
 
@@ -34,11 +36,15 @@ public class Bijdrage {
         return bijdrageID;
     }
 
-    public float getBedrag() {
+    public double getBedrag() {
         return bedrag;
     }
 
     public BetaalMethode getBetaalMethode() {
         return betaalMethode;
+    }
+
+    public List<Bezoek> getBezoeken() {
+        return bezoeken;
     }
 }
