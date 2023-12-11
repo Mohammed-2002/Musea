@@ -1,6 +1,6 @@
 package be.kuleuven.dbproject.controller;
 
-public class BeheerScherm1Controller {
+public class MedewerkersDataController {
 
     public void initialize() {
 

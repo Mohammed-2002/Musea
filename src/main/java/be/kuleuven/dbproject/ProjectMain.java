@@ -14,13 +14,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * DB Taak 2022-2023: De Vrolijke Zweters
- * Zie https://kuleuven-diepenbeek.github.io/db-course/extra/project/ voor opgave details
- *
- * Deze code is slechts een quick-start om je op weg te helpen met de integratie van JavaFX tabellen en data!
- * Zie README.md voor meer informatie.
- */
+
 public class ProjectMain extends Application {
 
     private static Stage rootStage;
@@ -32,7 +26,7 @@ public class ProjectMain extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         rootStage = stage;
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("logIn.fxml"));
 
         Scene scene = new Scene(root);
 
@@ -40,6 +34,7 @@ public class ProjectMain extends Application {
         stage.setScene(scene);
         stage.show();
 
+        /*
         var sessionFactory = Persistence.createEntityManagerFactory("be.kuleuven.dbproject");
         var entityManager = sessionFactory.createEntityManager();
         BezoekerRepository bezoekerRepository = new BezoekerRepository(entityManager);
@@ -58,9 +53,9 @@ public class ProjectMain extends Application {
         museumRepository.save(museum2);
         museumRepository.save(museum3);
 
-        Medewerker medewerker1 = new Medewerker("Mohammed","mohammed@gmail.com","password",LocalDate.of(2002,11,27));
-        Medewerker medewerker2 = new Medewerker("Ahmed","Ahmed@gmail.com","wachtwoord",LocalDate.of(2000,10,5));
-        Medewerker medewerker3 = new Medewerker("Jan","jan@gmail.com","jan123",LocalDate.of(2001,5,2));
+        Medewerker medewerker1 = new Medewerker("Mohammed","mohammed@gmail.com","password",LocalDate.of(2002,11,27), true);
+        Medewerker medewerker2 = new Medewerker("Ahmed","ahmed@gmail.com","wachtwoord",LocalDate.of(2000,10,5), false);
+        Medewerker medewerker3 = new Medewerker("Jan","jan@gmail.com","jan123",LocalDate.of(2001,5,2), false);
 
         museum1.voegMedewerkerToe(medewerker1);
         museum2.voegMedewerkerToe(medewerker2);
@@ -113,6 +108,7 @@ public class ProjectMain extends Application {
         bezoekRepository.save(bezoek1);
         bezoekRepository.save(bezoek2);
         bezoekRepository.save(bezoek3);
+
         /*
         bezoekRepository.update(bezoek1);
         bezoekRepository.update(bezoek2);

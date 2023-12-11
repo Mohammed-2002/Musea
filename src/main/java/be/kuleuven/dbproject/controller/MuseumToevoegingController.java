@@ -7,10 +7,7 @@ import be.kuleuven.dbproject.repository.MuseumRepository;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -54,15 +51,14 @@ public class MuseumToevoegingController {
             oldStage.close();
 
             var stage = new Stage();
-            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("beheerscherm2.fxml"));
+            var root = (TabPane) FXMLLoader.load(getClass().getClassLoader().getResource("museaMedewerker.fxml"));
             var scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("welcome");
             stage.initOwner(ProjectMain.getRootStage());
             stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
         } catch (Exception e) {
-            throw new RuntimeException("Kan beheerscherm2 niet vinden", e);
+            throw new RuntimeException("Kan MuseaMedewerker.fxml niet vinden", e);
         }
     }
 }

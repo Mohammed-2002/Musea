@@ -18,25 +18,28 @@ public class Medewerker {
     private String wachtwoord;
     @Column(nullable = false)
     private LocalDate geboortedatum;
-
+    @Column(nullable = false)
+    private boolean admin;
     @ManyToMany(mappedBy = "medewerkers", fetch = FetchType.LAZY)
     private List<Museum> musea;
 
     public Medewerker(){
 
     }
-    public Medewerker(String naam, String emailAdres, String wachtwoord, LocalDate geboortedatum, List<Museum> musea) {
+    public Medewerker(String naam, String emailAdres, String wachtwoord, LocalDate geboortedatum, List<Museum> musea, boolean admin) {
         this.naam = naam;
         this.emailAdres = emailAdres;
         this.wachtwoord = wachtwoord;
         this.geboortedatum = geboortedatum;
         this.musea = musea;
+        this.admin = admin;
     }
-    public Medewerker(String naam, String emailAdres, String wachtwoord, LocalDate geboortedatum) {
+    public Medewerker(String naam, String emailAdres, String wachtwoord, LocalDate geboortedatum, boolean admin) {
         this.naam = naam;
         this.emailAdres = emailAdres;
         this.wachtwoord = wachtwoord;
         this.geboortedatum = geboortedatum;
+        this.admin = admin;
         this.musea = new ArrayList<>();
     }
 
@@ -82,5 +85,13 @@ public class Medewerker {
     public void voegMuseumToe(Museum museum){
         musea.add(museum);
         museum.getMedewerkers().add(this);
+    }
+
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 }
