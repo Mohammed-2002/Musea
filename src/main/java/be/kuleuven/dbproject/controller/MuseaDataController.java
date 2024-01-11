@@ -36,6 +36,8 @@ public class MuseaDataController {
     private TableView tblConfigs;
     @FXML
     private Button btnVoegMedewerkerToe;
+    @FXML
+    private Button btnToonMedewerkers;
 
     SharedData sharedData = SharedData.getInstance();
 
@@ -47,9 +49,10 @@ public class MuseaDataController {
         }
 
 
-        initTable();
+        initTable(); //tabel laten zien
 
         btnAdd.setOnAction(e -> addNewRow());
+        btnToonMedewerkers.setOnAction(e -> btnToonMedewerkers());
 
         btnVoegMedewerkerToe.setOnAction(e -> {
             IsOneRowSelected();
@@ -77,6 +80,22 @@ public class MuseaDataController {
         });
     }
 
+    private void btnToonMedewerkers() {
+        try {
+            Stage currentStage = (Stage) btnToonMedewerkers.getScene().getWindow();
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("toonMedewerkers.fxml"));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("De medewerkers van dit museum zijn:");
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Kan toonMedewerkers.fxml niet vinden", e);
+        }
+    }
+
     private void voegEenNieuweMedewerkerToe() {
 
         MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
@@ -102,10 +121,9 @@ public class MuseaDataController {
     }
 
 
-    private void initTable() {
+    private void initTable() { //tabel maken
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tblConfigs.getColumns().clear();
-
 
         int colIndex = 0;
         for(var colName : new String[]{"museumID", "Naam", "Adres"}) {
@@ -115,6 +133,7 @@ public class MuseaDataController {
             tblConfigs.getColumns().add(col);
             colIndex++;
         }
+
         MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
         List<Museum> musea = new ArrayList<>();
         if (sharedData.getLoggedInMedewerker().isAdmin()){
@@ -176,7 +195,7 @@ public class MuseaDataController {
 
         // Haal het resultaat op (OK of Niet verwijderen)
         var result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK) {
+        if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
                 int museumID = Integer.parseInt(selectedRow.get(0));
                 MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
                 museumRepository.deleteByID(museumID);

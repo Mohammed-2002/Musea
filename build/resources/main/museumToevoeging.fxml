@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="254.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.dbproject.controller.MuseumToevoegingController">
     <children>
-        <Text layoutX="50.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Geef de gegevens van het teo te voegen museum in" textAlignment="CENTER" wrappingWidth="312.03125">
+        <Text layoutX="50.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Geef de gegevens van het toe te voegen museum in" textAlignment="CENTER" wrappingWidth="312.03125">
             <font>
                 <Font size="14.0" />
             </font>
