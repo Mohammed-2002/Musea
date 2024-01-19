@@ -36,7 +36,7 @@ public class MedewerkersDataController {
 
     SharedData sharedData = SharedData.getInstance();
 
-    public void init() {
+    public void initialize() {
         if (!sharedData.getLoggedInMedewerker().isAdmin()) {
             btnDelete.setDisable(true);
             btnAdd.setDisable(true);
@@ -83,7 +83,8 @@ public class MedewerkersDataController {
         }
     }
 
-    private void initTable() { //tabel maken
+    private void initTable() {
+
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tblConfigs.getColumns().clear();
 
@@ -130,16 +131,16 @@ public class MedewerkersDataController {
         // Vraag om bevestiging met twee knoppen
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Bevestig verwijdering");
-        alert.setHeaderText("Ben je zeker dat je de geselecteerde musea wilt verwijderen?");
+        alert.setHeaderText("Ben je zeker dat je de geselecteerde meedewerker wil verwijderen?");
         alert.setContentText("Deze actie kan niet ongedaan worden gemaakt.");
         alert.getButtonTypes().setAll(ButtonType.OK, nietVerwijderenButton);
 
         // Haal het resultaat op (OK of Niet verwijderen)
         var result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
-            int museumID = Integer.parseInt(selectedRow.get(0));
-            MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
-            museumRepository.deleteByID(museumID);
+            int medewerkerID = Integer.parseInt(selectedRow.get(0));
+            MedewerkerRepository medewerkerRepository = new MedewerkerRepository(sharedData.getEntityManager());
+            medewerkerRepository.deleteByID(medewerkerID);
         }
         refreshCurrentStage();
 

@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MuseaDataController {
 
@@ -49,7 +50,7 @@ public class MuseaDataController {
         }
 
 
-        initTable(); //tabel laten zien
+        initTable();
 
         btnAdd.setOnAction(e -> addNewRow());
         btnToonMedewerkers.setOnAction(e -> btnToonMedewerkers());
@@ -80,7 +81,7 @@ public class MuseaDataController {
         });
     }
 
-    private void btnToonMedewerkers() {
+        private void btnToonMedewerkers() {
         try {
             Stage currentStage = (Stage) btnToonMedewerkers.getScene().getWindow();
             var stage = new Stage();
@@ -246,6 +247,20 @@ public class MuseaDataController {
 
         // Toon het dialoogvenster en wacht op de reactie van de gebruiker
         alert.showAndWait();
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent()) {
+            if (result.get() == nieuweMedewerkerButton) {
+                // Handle the "Nieuwe medewerker" case
+                return true;
+            } else if (result.get() == bestaandeMedewerkerButton) {
+                // Handle the "Bestaande medewerker" case
+                return false;
+            } else if (result.get() == cancelButton) {
+                // Handle the "Annuleren" case (close the window)
+                return false;
+            }
+        }
 
         // Bepaal de keuze van de gebruiker op basis van de reactie
         return alert.getResult() == nieuweMedewerkerButton;

@@ -24,10 +24,11 @@ import java.util.List;
 public class toonMedewerkersController {
 
 
+    @FXML
     private TableView tblConfigs;
     SharedData sharedData = SharedData.getInstance();
 
-    public void init() {
+    public void initialize() {
         initTable();
     }
 
@@ -36,7 +37,7 @@ public class toonMedewerkersController {
         tblConfigs.getColumns().clear();
 
         int colIndex = 0;
-        for(var colName : new String[]{"MedewerkerID", "Naam", "Email"}) {
+        for(var colName : new String[]{"medewerkerID", "Naam", "Adres"}) {
             TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
             final int finalColIndex = colIndex;
             col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
@@ -44,14 +45,9 @@ public class toonMedewerkersController {
             colIndex++;
         }
 
-        MedewerkerRepository medewerkerRepository = new MedewerkerRepository(sharedData.getEntityManager());
+        MedewerkerRepository medewerkerRepository = new MedewerkerRepository((sharedData.getEntityManager()));
         List<Medewerker> medewerkerLijst = new ArrayList<>();
-        if (sharedData.getLoggedInMedewerker().isAdmin()){
-            medewerkerLijst = medewerkerRepository.findAll();
-        }else{
-            medewerkerLijst = medewerkerRepository.findAll();
-        }
-
+        medewerkerLijst = medewerkerRepository.findAll();
         for(int i = 0; i <= medewerkerLijst.size()-1; i++) {
             tblConfigs.getItems().add(FXCollections.observableArrayList(String.valueOf(medewerkerLijst.get(i).getMedewerkerID()), medewerkerLijst.get(i).getNaam(), medewerkerLijst.get(i).getEmailAdres() ));
         }
