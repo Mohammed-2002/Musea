@@ -20,11 +20,12 @@
             <Font name="System Bold Italic" size="13.0" />
          </font>
       </Text>
-      <Button fx:id="btnAdd" layoutX="16.0" layoutY="304.0" mnemonicParsing="false" text="Voeg Toe" />
-      <Button fx:id="btnModify" layoutX="104.0" layoutY="304.0" mnemonicParsing="false" text="Bewerk" />
-      <Button fx:id="btnClose" layoutX="520.0" layoutY="304.0" mnemonicParsing="false" text="Sluiten" />
-      <Button fx:id="btnDelete" layoutX="431.0" layoutY="304.0" mnemonicParsing="false" text="Verwijder" />
-       <Button fx:id="btnToonMedewerkers" layoutX="192" layoutY="304.0" mnemonicParsing="false" text="Toon Medewerkers" />
-       <Button fx:id="btnVoegMedewerkerToe" layoutX="192" layoutY="344.0" mnemonicParsing="false" text="Voeg een medewerker toe" />
+      <Button fx:id="btnAdd" layoutX="16.0" layoutY="300.0" mnemonicParsing="false" text="Voeg Toe" />
+      <Button fx:id="btnModify" layoutX="90.0" layoutY="300.0" mnemonicParsing="false" text="Bewerk" />
+      <Button fx:id="btnClose" layoutX="525.0" layoutY="300.0" mnemonicParsing="false" text="Sluiten" />
+      <Button fx:id="btnDelete" layoutX="16.0" layoutY="330.0" mnemonicParsing="false" text="Verwijder" />
+       <Button fx:id="btnToonMedewerkers" layoutX="192" layoutY="300.0" mnemonicParsing="false" text="Toon Medewerkers" />
+       <Button fx:id="btnVoegMedewerkerToe" layoutX="192" layoutY="330.0" mnemonicParsing="false" text="Voeg een medewerker toe" />
+       <Button fx:id="btnRegistreerBezoek" layoutX="400" layoutY="300.0" mnemonicParsing="false" text="Registreer bezoek" />
    </children>
 </AnchorPane>

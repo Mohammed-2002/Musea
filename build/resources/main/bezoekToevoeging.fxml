@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="254.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.dbproject.controller.bezoekToevoegingController">
+    <children>
+        <Text layoutX="50.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Geef de gegevens van het bezoek in" textAlignment="CENTER" wrappingWidth="312.03125">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Text>
+        <TextField fx:id="txtNaam" layoutX="50.0" layoutY="69.0" promptText="Naam van bezoeker" />
+        <Button fx:id="btnVoegToe" layoutX="179.5" layoutY="173.0" mnemonicParsing="false" text="Voeg Toe" />
+      <ComboBox fx:id="dropdown" layoutX="50.0" layoutY="114.0" prefWidth="150.0" />
+    </children>
+</AnchorPane>

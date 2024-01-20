@@ -39,6 +39,9 @@ public class MuseaDataController {
     private Button btnVoegMedewerkerToe;
     @FXML
     private Button btnToonMedewerkers;
+    @FXML
+    private Button btnRegistreerBezoek;
+
 
     SharedData sharedData = SharedData.getInstance();
 
@@ -74,6 +77,11 @@ public class MuseaDataController {
             IsOneRowSelected();
             deleteCurrentRow();
         });
+
+        btnRegistreerBezoek.setOnAction(e -> {
+            IsOneRowSelected();
+            registeerBezoek();
+        });
         
         btnClose.setOnAction(e -> {
             var stage = (Stage) btnClose.getScene().getWindow();
@@ -81,7 +89,30 @@ public class MuseaDataController {
         });
     }
 
-        private void btnToonMedewerkers() {
+    /**
+     * Maak een bezoekaan een museum aan
+     * Hier kan men een bezoek registreren, een bijdrage toevoegen (betaalmethode), boek/spel geleend?
+     */
+    private void registeerBezoek() {
+        ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
+        try {
+            Stage currentStage = (Stage) btnAdd.getScene().getWindow();
+            currentStage.close();
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("bezoekToevoeging.fxml"));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Toevoeging van een bezoek");
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Kan bezoekToevoeging.fxml niet vinden", e);
+        }
+
+    }
+
+    private void btnToonMedewerkers() {
         try {
             Stage currentStage = (Stage) btnToonMedewerkers.getScene().getWindow();
             var stage = new Stage();
@@ -217,7 +248,7 @@ public class MuseaDataController {
 
     private boolean IsOneRowSelected() {
         if(tblConfigs.getSelectionModel().getSelectedCells().size() == 0) {
-            showAlert("Hela!", "Eerst een record selecteren hé.");
+            showAlert("Fout!", "Selecteer een museum");
         }
         return !(tblConfigs.getSelectionModel().getSelectedCells().size() == 0);
     }
