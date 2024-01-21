@@ -139,7 +139,6 @@ public class MuseaDataController {
         sharedData.setMuseum(museumRepository.findById(museumID));
         try {
             Stage currentStage = (Stage) btnAdd.getScene().getWindow();
-            currentStage.close();
             var stage = new Stage();
             var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("toonGames.fxml"));
             var scene = new Scene(root);

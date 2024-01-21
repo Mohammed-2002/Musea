@@ -143,7 +143,7 @@ public class ToonGamesController{
 
         for(int i = 0; i <= games.size()-1; i++) {
             gameTableView.getItems().add(FXCollections.observableArrayList(String.valueOf(games.get(i).getGameID()), games.get(i).getNaam(),
-                    games.get(i).getDeveloper(), String.valueOf(games.get(i).getPublicatiejaar()), games.get(i).getConsole(),
+                    games.get(i).getDeveloper(), String.valueOf(games.get(i).getPublicatiejaar()), String.valueOf(games.get(i).getConsole()),
                     String.valueOf(games.get(i).isUitgeleend())));
         }
     }
