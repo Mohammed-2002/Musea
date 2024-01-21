@@ -93,6 +93,10 @@ public class ToonBoekenController{
             BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
             MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
             Boek boek = boekRepository.findById(boekID);
+            System.out.println(boekID);
+            Museum museum = boek.getMuseum();
+            museum.getBoeken().remove(boek);
+            boekRepository.delete(boek);
             museumRepository.update(boek.getMuseum());
             initTable(sharedData.getMuseum().getBoeken());
         }
