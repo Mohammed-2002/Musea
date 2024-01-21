@@ -56,7 +56,15 @@ public class MuseaDataController {
         initTable();
 
         btnAdd.setOnAction(e -> addNewRow());
-        btnToonMedewerkers.setOnAction(e -> btnToonMedewerkers());
+
+        btnToonMedewerkers.setOnAction(e -> {
+            if (IsOneRowSelected()) {
+
+                btnToonMedewerkers();
+
+            }
+            });
+
 
         btnVoegMedewerkerToe.setOnAction(e -> {
             IsOneRowSelected();
@@ -95,6 +103,9 @@ public class MuseaDataController {
      */
     private void registeerBezoek() {
         ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
+        int museumID = Integer.parseInt(selectedRow.get(0));
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+        sharedData.setMuseum(museumRepository.findById(museumID));
         try {
             Stage currentStage = (Stage) btnAdd.getScene().getWindow();
             currentStage.close();
@@ -114,7 +125,10 @@ public class MuseaDataController {
 
     private void btnToonMedewerkers() {
         try {
-            Stage currentStage = (Stage) btnToonMedewerkers.getScene().getWindow();
+            ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
+            int museumID = Integer.parseInt(selectedRow.get(0));
+            MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+            sharedData.setMuseum(museumRepository.findById(museumID));
             var stage = new Stage();
             var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("toonMedewerkers.fxml"));
             var scene = new Scene(root);
@@ -154,6 +168,7 @@ public class MuseaDataController {
 
 
     private void initTable() { //tabel maken
+        tblConfigs.getItems().clear();
         tblConfigs.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         tblConfigs.getColumns().clear();
 
@@ -232,7 +247,8 @@ public class MuseaDataController {
                 MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
                 museumRepository.deleteByID(museumID);
             }
-            refreshCurrentStage();
+            initTable();
+            //refreshCurrentStage();
 
     }
     private void modifyCurrentRow() {
@@ -252,17 +268,7 @@ public class MuseaDataController {
         }
         return !(tblConfigs.getSelectionModel().getSelectedCells().size() == 0);
     }
-    private void refreshCurrentStage() {
-        // Haal de huidige stage op en vernieuw deze
-        Stage currentStage = (Stage) btnAdd.getScene().getWindow();
-        ObservableList<ObservableList<String>> items = FXCollections.observableArrayList();
-        tblConfigs.setItems(items);
-        // Optioneel: Als je extra configuratie in je TableView hebt, kun je deze ook opnieuw instellen
-        tblConfigs.getColumns().clear();
-        initTable();
-        currentStage.hide();  // Verberg de huidige stage
-        currentStage.show();  // Toon de vernieuwde stage
-    }
+
     private boolean wordtEenNieuweMedewerkerToegevoegd() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Keuze medewerker");

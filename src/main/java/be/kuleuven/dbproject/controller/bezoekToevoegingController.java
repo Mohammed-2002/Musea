@@ -4,14 +4,14 @@ import be.kuleuven.dbproject.model.BetaalMethode;
 import be.kuleuven.dbproject.model.Boek;
 import be.kuleuven.dbproject.model.Museum;
 import be.kuleuven.dbproject.repository.BoekRepository;
+import be.kuleuven.dbproject.repository.MuseumRepository;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class bezoekToevoegingController implements Initializable {
+public class bezoekToevoegingController{
 
     @FXML
     public TableView boekTableView;
@@ -30,41 +30,38 @@ public class bezoekToevoegingController implements Initializable {
     @FXML
     public TableColumn auteurBookTableColumn;
     @FXML
-    public TableColumn jaarBookTableColumn;
+    public TableColumn publicatiejaarBookTableColumn;
     @FXML
     public TableColumn uitgeverBookTableColumn;
     @FXML
     public TableColumn uitgeleendBookTableColumn;
     @FXML
     private ComboBox selecteerBetaalmethode;
+
     @FXML
-    private ComboBox selecteerBoek;
+    private TextField zoekBoekTextBar;
+
+    SharedData sharedData = SharedData.getInstance();
 
     ObservableList<Boek> boeklijsttable = FXCollections.observableArrayList();
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
+    public void initialize() {
         ObservableList<BetaalMethode> list = FXCollections.observableArrayList(BetaalMethode.values());
+
         selecteerBetaalmethode.setItems(list);
 
-        BoekRepository boekRepository = new BoekRepository(SharedData.getInstance().getEntityManager());
-        ObservableList<Boek> boeklijst = FXCollections.observableArrayList(boekRepository.findAll());
+        initTable(sharedData.getMuseum().getBoeken());
 
-        selecteerBoek.setItems(boeklijst);
-
-        for (int i = 0; i < boeklijst.size(); i++) {
-            Integer id = boeklijst.get(i).getBoekID();
-            String naam = boeklijst.get(i).getNaam();
-            String auteur = boeklijst.get(i).getAuteur();
-            Integer jaar = boeklijst.get(i).getPublicatiejaar();
-            String uitgever = boeklijst.get(i).getUitgever();
-            Boolean uitgeleend = boeklijst.get(i).isUitgeleend();
-
-            boeklijsttable.add(new Boek(naam, auteur, jaar, uitgever, null, 0.0));
-
-        }
+        BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
+        zoekBoekTextBar.textProperty().addListener((observable, oldValue, newValue) ->{
+            if (newValue.isEmpty() || newValue.isBlank() || newValue == null ){
+                initTable(sharedData.getMuseum().getBoeken());
+            }
+            else{
+                initTable(boekRepository.findByPartialNameInMuseum(newValue, sharedData.getMuseum()));
+            }
+        });
     }
 
 
@@ -74,16 +71,28 @@ public class bezoekToevoegingController implements Initializable {
         System.out.println(betaalMethode);
     }
 
-    public void selectbook(ActionEvent actionEvent) {
-    }
-}
-/**
+    private void initTable(List<Boek> boeken) {
 
-    public void selectbook(javafx.event.ActionEvent actionEvent) {
-        //String selected = selecteerBoek.getSelectionModel().getSelectedItem().toString();
-        //System.out.println(selected);
-       // BoekRepository boekRepository = new BoekRepository(SharedData.getInstance().getEntityManager());
-       // List<Boek> boeklijst = boekRepository.findAll();
-      //  System.out.println(boeklijst);
+        boekTableView.getItems().clear();
+        boekTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        boekTableView.getColumns().clear();
+
+        int colIndex = 0;
+        for(var colName : new String[]{"ID", "Naam", "Auteur", "Jaar", "Uitgever", "Uitgeleend"}) {
+            TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
+            final int finalColIndex = colIndex;
+            col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
+            boekTableView.getColumns().add(col);
+            colIndex++;
+        }
+
+
+        for(int i = 0; i <= boeken.size()-1; i++) {
+            boekTableView.getItems().add(FXCollections.observableArrayList(String.valueOf(boeken.get(i).getBoekID()), boeken.get(i).getNaam(),
+                    boeken.get(i).getAuteur(), String.valueOf(boeken.get(i).getPublicatiejaar()), boeken.get(i).getUitgever(),
+                    String.valueOf(boeken.get(i).isUitgeleend())));
+        }
     }
- **/
+
+}
+

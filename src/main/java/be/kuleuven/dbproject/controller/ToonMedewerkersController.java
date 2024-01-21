@@ -1,27 +1,16 @@
 package be.kuleuven.dbproject.controller;
 
-import be.kuleuven.dbproject.ProjectMain;
 import be.kuleuven.dbproject.model.Medewerker;
-import be.kuleuven.dbproject.model.Museum;
 import be.kuleuven.dbproject.repository.MedewerkerRepository;
-import be.kuleuven.dbproject.repository.MuseumRepository;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-public class toonMedewerkersController {
+public class ToonMedewerkersController {
 
 
     @FXML
@@ -47,14 +36,11 @@ public class toonMedewerkersController {
 
         MedewerkerRepository medewerkerRepository = new MedewerkerRepository((sharedData.getEntityManager()));
         List<Medewerker> medewerkerLijst = new ArrayList<>();
-        medewerkerLijst = medewerkerRepository.findAll();
+        medewerkerLijst = sharedData.getMuseum().getMedewerkers();
         for(int i = 0; i <= medewerkerLijst.size()-1; i++) {
             tblConfigs.getItems().add(FXCollections.observableArrayList(String.valueOf(medewerkerLijst.get(i).getMedewerkerID()), medewerkerLijst.get(i).getNaam(), medewerkerLijst.get(i).getEmailAdres() ));
         }
-
     }
-
-
 }
 
 
