@@ -67,6 +67,9 @@ public class GameToevoegingController {
                 MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
 
                 Game game = new Game(sharedData.getMuseum(), developer, publicatiejaar, waarde, naam, console);
+
+                sharedData.getMuseum().voegGameToe(game);
+
                 museumRepository.update(sharedData.getMuseum());
 
                 showAlert("De game is toegevoegd.", "Het is toegevoegd aan de geselecteerde musea");
