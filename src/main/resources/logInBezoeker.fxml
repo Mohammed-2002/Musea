@@ -11,10 +11,11 @@
                 <Font size="17.0" />
             </font>
         </Text>
-        <TextField fx:id="txtEmail" layoutX="50.0" layoutY="141.0" promptText="Email Address" />
+        <TextField fx:id="txtEmail" layoutX="125.0" layoutY="142.0" promptText="Email Address" />
 
         <!-- Centering the buttons horizontally -->
-        <Button fx:id="btnLogin" layoutX="180.0" layoutY="186.0" mnemonicParsing="false" text="Login" />
-      <TextField layoutX="50.0" layoutY="102.0" promptText="ID" />
+        <Button fx:id="btnLogin" layoutX="125.0" layoutY="186.0" mnemonicParsing="false" text="Login" />
+      <TextField fx:id="textID" layoutX="125.0" layoutY="102.0" promptText="ID" />
+      <Button layoutX="204.0" layoutY="186.0" mnemonicParsing="false" text="Registreer" />
     </children>
 </AnchorPane>

@@ -2,8 +2,10 @@ package be.kuleuven.dbproject.controller;
 
 import be.kuleuven.dbproject.model.BetaalMethode;
 import be.kuleuven.dbproject.model.Boek;
+import be.kuleuven.dbproject.model.Game;
 import be.kuleuven.dbproject.model.Museum;
 import be.kuleuven.dbproject.repository.BoekRepository;
+import be.kuleuven.dbproject.repository.GameRepository;
 import be.kuleuven.dbproject.repository.MuseumRepository;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
@@ -24,6 +26,8 @@ public class bezoekToevoegingController{
     @FXML
     public TableView boekTableView;
     @FXML
+    public TableView gameTableView;
+    @FXML
     public TableColumn idBookTableColumn;
     @FXML
     public TableColumn naamBookTableColumn;
@@ -41,9 +45,14 @@ public class bezoekToevoegingController{
     @FXML
     private TextField zoekBoekTextBar;
 
+    @FXML
+    private TextField zoekGameTextBar;
+
+
     SharedData sharedData = SharedData.getInstance();
 
     ObservableList<Boek> boeklijsttable = FXCollections.observableArrayList();
+    ObservableList<Boek> gamelijsttable = FXCollections.observableArrayList();
 
 
     public void initialize() {
@@ -52,6 +61,17 @@ public class bezoekToevoegingController{
         selecteerBetaalmethode.setItems(list);
 
         initTable(sharedData.getMuseum().getBoeken());
+        initTable2(sharedData.getMuseum().getGames());
+
+        GameRepository gameRepository = new GameRepository(sharedData.getEntityManager());
+        zoekGameTextBar.textProperty().addListener((observable, oldValue, newValue) ->{
+            if (newValue.isEmpty() || newValue.isBlank() || newValue == null ){
+                initTable2(sharedData.getMuseum().getGames());
+            }
+            else{
+                initTable2(gameRepository.findByPartialNameInMuseum(newValue, sharedData.getMuseum()));
+            }
+        });
 
         BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
         zoekBoekTextBar.textProperty().addListener((observable, oldValue, newValue) ->{
@@ -86,7 +106,6 @@ public class bezoekToevoegingController{
             colIndex++;
         }
 
-
         for(int i = 0; i <= boeken.size()-1; i++) {
             boekTableView.getItems().add(FXCollections.observableArrayList(String.valueOf(boeken.get(i).getBoekID()), boeken.get(i).getNaam(),
                     boeken.get(i).getAuteur(), String.valueOf(boeken.get(i).getPublicatiejaar()), boeken.get(i).getUitgever(),
@@ -94,5 +113,26 @@ public class bezoekToevoegingController{
         }
     }
 
+    private void initTable2(List<Game> games) {
+
+        gameTableView.getItems().clear();
+        gameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        gameTableView.getColumns().clear();
+
+        int colIndex = 0;
+        for (var colName : new String[]{"ID", "Naam", "Developer", "Jaar", "Console", "Uitgeleend"}) {
+            TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
+            final int finalColIndex = colIndex;
+            col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
+            gameTableView.getColumns().add(col);
+            colIndex++;
+        }
+
+        for (int i = 0; i <= games.size() - 1; i++) {
+            gameTableView.getItems().add(FXCollections.observableArrayList(String.valueOf(games.get(i).getGameID()), games.get(i).getNaam(),
+                    games.get(i).getDeveloper(), String.valueOf(games.get(i).getPublicatiejaar()), String.valueOf(games.get(i).getConsole()),
+                    String.valueOf(games.get(i).isUitgeleend())));
+        }
+    }
 }
 

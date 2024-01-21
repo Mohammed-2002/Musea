@@ -167,7 +167,7 @@ public class MuseaDataController {
             Stage currentStage = (Stage) btnAdd.getScene().getWindow();
             currentStage.close();
             var stage = new Stage();
-            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("bezoekToevoeging.fxml"));
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("logInBezoeker.fxml"));
             var scene = new Scene(root);
             stage.setScene(scene);
             stage.setTitle("Toevoeging van een bezoek");
@@ -175,7 +175,7 @@ public class MuseaDataController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
         } catch (Exception e) {
-            throw new RuntimeException("Kan bezoekToevoeging.fxml niet vinden", e);
+            throw new RuntimeException("Kan logInBezoeker.fxml niet vinden", e);
         }
 
     }
