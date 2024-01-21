@@ -101,8 +101,10 @@ public class ToonBoekenController{
 
     private void addBook() {
         try {
+            /**
             Stage oldStage = (Stage) btnAddBook.getScene().getWindow();
             oldStage.close();
+             **/
             var stage = new Stage();
             var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("voegBoekToe.fxml"));
             var scene = new Scene(root);

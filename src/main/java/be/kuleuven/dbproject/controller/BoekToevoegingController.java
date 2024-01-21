@@ -47,15 +47,10 @@ public class BoekToevoegingController {
         Integer publicatiejaar = Integer.parseInt(jaarField.getText());
         String uitgever = uitgeverField.getText();
         Double waarde = Double.parseDouble(waardeField.getText());
-        var sessionFactory = Persistence.createEntityManagerFactory("be.kuleuven.dbproject");
-        var entityManager = sessionFactory.createEntityManager();
-        MuseumRepository museumRepository = new MuseumRepository(entityManager);
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
         if (!naam.isEmpty() && !auteur.isEmpty()) {
             Boek boek = new Boek(naam, auteur, publicatiejaar, uitgever, sharedData.getMuseum(), waarde);
             museumRepository.update(sharedData.getMuseum());
-            //currentStage.close();
-
-
         }
     }
 
