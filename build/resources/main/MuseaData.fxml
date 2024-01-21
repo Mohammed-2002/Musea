@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="356.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.dbproject.controller.MuseaDataController">
+<AnchorPane prefHeight="356.0" prefWidth="672.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.dbproject.controller.MuseaDataController">
    <children>
-      <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="246.0" prefWidth="567.0">
+      <TableView fx:id="tblConfigs" layoutX="14.0" layoutY="47.0" prefHeight="246.0" prefWidth="641.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
@@ -22,10 +19,12 @@
       </Text>
       <Button fx:id="btnAdd" layoutX="16.0" layoutY="300.0" mnemonicParsing="false" text="Voeg Toe" />
       <Button fx:id="btnModify" layoutX="90.0" layoutY="300.0" mnemonicParsing="false" text="Bewerk" />
-      <Button fx:id="btnClose" layoutX="525.0" layoutY="300.0" mnemonicParsing="false" text="Sluiten" />
+      <Button fx:id="btnClose" layoutX="603.0" layoutY="329.0" mnemonicParsing="false" text="Sluiten" />
       <Button fx:id="btnDelete" layoutX="16.0" layoutY="330.0" mnemonicParsing="false" text="Verwijder" />
        <Button fx:id="btnToonMedewerkers" layoutX="192" layoutY="300.0" mnemonicParsing="false" text="Toon Medewerkers" />
        <Button fx:id="btnVoegMedewerkerToe" layoutX="192" layoutY="330.0" mnemonicParsing="false" text="Voeg een medewerker toe" />
-       <Button fx:id="btnRegistreerBezoek" layoutX="400" layoutY="300.0" mnemonicParsing="false" text="Registreer bezoek" />
+       <Button fx:id="btnRegistreerBezoek" layoutX="544.0" layoutY="300.0" mnemonicParsing="false" text="Registreer bezoek" />
+      <Button fx:id="btnToonGames" layoutX="419.0" layoutY="300.0" mnemonicParsing="false" text="Toon Games" />
+      <Button fx:id="btnToonBoeken" layoutX="322.0" layoutY="300.0" mnemonicParsing="false" text="Toon Boeken" />
    </children>
 </AnchorPane>

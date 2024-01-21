@@ -26,6 +26,10 @@ import java.util.Optional;
 public class MuseaDataController {
 
     @FXML
+    public Button btnToonGames;
+    @FXML
+    public Button btnToonBoeken;
+    @FXML
     private Button btnDelete;
     @FXML
     private Button btnAdd;
@@ -56,6 +60,17 @@ public class MuseaDataController {
         initTable();
 
         btnAdd.setOnAction(e -> addNewRow());
+
+
+        btnToonBoeken.setOnAction(e -> {
+            IsOneRowSelected();
+            toonBoeken();
+        });
+
+        btnToonGames.setOnAction(e -> {
+            IsOneRowSelected();
+            toonGames();
+        });
 
         btnToonMedewerkers.setOnAction(e -> {
             if (IsOneRowSelected()) {
@@ -96,6 +111,49 @@ public class MuseaDataController {
             stage.close();
         });
     }
+
+    private void toonBoeken() {
+        ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
+        int museumID = Integer.parseInt(selectedRow.get(0));
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+        sharedData.setMuseum(museumRepository.findById(museumID));
+        try {
+            Stage currentStage = (Stage) btnAdd.getScene().getWindow();
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("toonBoeken.fxml"));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("De boeken van dit museum zijn:");
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Kan toonBoeken.fxml niet vinden", e);
+        }
+    }
+
+    private void toonGames() {
+        ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
+        int museumID = Integer.parseInt(selectedRow.get(0));
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+        sharedData.setMuseum(museumRepository.findById(museumID));
+        try {
+            Stage currentStage = (Stage) btnAdd.getScene().getWindow();
+            currentStage.close();
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("toonGames.fxml"));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("De games van dit museum zijn:");
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Kan toonGames.fxml niet vinden", e);
+        }
+    }
+
+
 
     /**
      * Maak een bezoekaan een museum aan
