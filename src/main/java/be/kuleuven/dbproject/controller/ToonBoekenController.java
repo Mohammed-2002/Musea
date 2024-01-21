@@ -91,11 +91,11 @@ public class ToonBoekenController{
         if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
             int boekID = Integer.parseInt(selectedRow.get(0));
             BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
-            boekRepository.deleteByID(boekID);
+            MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+            Boek boek = boekRepository.findById(boekID);
+            museumRepository.update(boek.getMuseum());
             initTable(sharedData.getMuseum().getBoeken());
         }
-        //refreshCurrentStage();
-
     }
 
 
