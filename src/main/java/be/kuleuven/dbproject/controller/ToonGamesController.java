@@ -94,6 +94,8 @@ public class ToonGamesController{
             stage.initOwner(ProjectMain.getRootStage());
             stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
+            Stage currentStage = (Stage) btnAddGame.getScene().getWindow();
+            currentStage.close();
         } catch (Exception e) {
             throw new RuntimeException("Kan voegGameToe.fxml niet vinden", e);
         }
@@ -110,16 +112,18 @@ public class ToonGamesController{
         alert.setContentText("Deze actie kan niet ongedaan worden gemaakt.");
         alert.getButtonTypes().setAll(ButtonType.OK, nietVerwijderenButton);
 
-        // Haal het resultaat op (OK of Niet verwijderen)
+
         var result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
-            int gameID = Integer.parseInt(selectedRow.get(0));
-            GameRepository gameRepository = new GameRepository(sharedData.getEntityManager());
-            MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
-            Game game = gameRepository.findById(gameID);
-            System.out.println(gameID);
+        int gameID = Integer.parseInt(selectedRow.get(0));
+        GameRepository gameRepository = new GameRepository(sharedData.getEntityManager());
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+        Game game = gameRepository.findById(gameID);
+        if(game.isUitgeleend()){
+            showAlert("Game is uitgeleend", "Deze game kan niet verwijderd worden omdat het nog steeds uitgeleend is");
+        }
+        else if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
             Museum museum = game.getMuseum();
-            museum.getBoeken().remove(game);
+            museum.getGames().remove(game);
             gameRepository.delete(game);
             museumRepository.update(game.getMuseum());
             initTable(sharedData.getMuseum().getGames());

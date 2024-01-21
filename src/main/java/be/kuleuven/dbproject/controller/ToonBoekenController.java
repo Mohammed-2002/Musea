@@ -85,12 +85,15 @@ public class ToonBoekenController{
 
         // Haal het resultaat op (OK of Niet verwijderen)
         var result = alert.showAndWait();
-        if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
-            int boekID = Integer.parseInt(selectedRow.get(0));
-            BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
-            MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
-            Boek boek = boekRepository.findById(boekID);
-            System.out.println(boekID);
+        int boekID = Integer.parseInt(selectedRow.get(0));
+        BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+        Boek boek = boekRepository.findById(boekID);
+
+        if(boek.isUitgeleend()){
+            showAlert("Boek is uitgeleend", "Dit boek kan niet verwijderd worden omdat het nog steeds uitgeleend is");
+        }
+        else if(result.isPresent() && result.get() == ButtonType.OK) { //haalt rij uit tabel
             Museum museum = boek.getMuseum();
             museum.getBoeken().remove(boek);
             boekRepository.delete(boek);
@@ -113,6 +116,8 @@ public class ToonBoekenController{
             stage.initOwner(ProjectMain.getRootStage());
             stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
+            Stage currentStage = (Stage) btnAddBook.getScene().getWindow();
+            currentStage.close();
         } catch (Exception e) {
             throw new RuntimeException("Kan voegBoekToe.fxml niet vinden", e);
         }

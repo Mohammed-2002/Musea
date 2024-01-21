@@ -18,7 +18,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -82,13 +81,8 @@ public class MuseaDataController {
 
 
         btnVoegMedewerkerToe.setOnAction(e -> {
-            IsOneRowSelected();
             if (IsOneRowSelected()) {
-                if(!wordtEenNieuweMedewerkerToegevoegd()){
-                    VoegEenBestaandeMedewerkerToe();
-                } else {
-                    voegEenNieuweMedewerkerToe();
-                }
+                VoegMedewerkerToeAanMuseum();
             }
         });
 
@@ -269,15 +263,18 @@ public class MuseaDataController {
     }
 
     private void VoegEenBestaandeMedewerkerToe() {
+        String mail = vraagEmailAdres();
         MedewerkerRepository medewerkerRepository= new MedewerkerRepository(sharedData.getEntityManager());
-        Medewerker medewerker = medewerkerRepository.findByEmailAdres(vraagEmailAdres());
+        Medewerker medewerker = medewerkerRepository.findByEmailAdres(mail);
         ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
         int museumID = Integer.parseInt(selectedRow.get(0));
         MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
         Museum museum = museumRepository.findById(museumID);
 
         if(medewerker == null){
-            showAlert("EmailAdres niet gevonden", "Het emailAdres van het bestaande medewerker is niet gevonden");
+            if(!mail.isEmpty()) {
+                showAlert("EmailAdres niet gevonden", "Het emailAdres van het bestaande medewerker is niet gevonden");
+            }
         } else if (museum.getMedewerkers().contains(medewerker)) {
             showAlert("medewerker werkt al in deze museum", "U probeert een medewerker toe te voegen aan een museum waar hij al werkt!");
         } else{
@@ -326,7 +323,7 @@ public class MuseaDataController {
         return !(tblConfigs.getSelectionModel().getSelectedCells().size() == 0);
     }
 
-    private boolean wordtEenNieuweMedewerkerToegevoegd() {
+    private void VoegMedewerkerToeAanMuseum() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Keuze medewerker");
         alert.setHeaderText("Voeg een nieuwe of bestaande medewerker toe?");
@@ -340,24 +337,19 @@ public class MuseaDataController {
         alert.getButtonTypes().setAll(nieuweMedewerkerButton, bestaandeMedewerkerButton, cancelButton);
 
         // Toon het dialoogvenster en wacht op de reactie van de gebruiker
-        alert.showAndWait();
+
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.isPresent()) {
             if (result.get() == nieuweMedewerkerButton) {
                 // Handle the "Nieuwe medewerker" case
-                return true;
+                voegEenNieuweMedewerkerToe();
             } else if (result.get() == bestaandeMedewerkerButton) {
-                // Handle the "Bestaande medewerker" case
-                return false;
+                VoegEenBestaandeMedewerkerToe();
             } else if (result.get() == cancelButton) {
                 // Handle the "Annuleren" case (close the window)
-                return false;
             }
         }
-
-        // Bepaal de keuze van de gebruiker op basis van de reactie
-        return alert.getResult() == nieuweMedewerkerButton;
     }
     private String vraagEmailAdres() {
         // Maak een nieuw dialoogvenster aan met een TextField om het e-mailadres in te voeren
