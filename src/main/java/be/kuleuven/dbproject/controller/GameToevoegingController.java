@@ -39,6 +39,7 @@ public class GameToevoegingController {
     @FXML
     private void initialize() {
         ObservableList<Console> consoleList = FXCollections.observableArrayList(Console.values());
+
         selecteerConsole.setItems(consoleList);
 
         btnVoegToe.setOnAction(event -> voegGameToe());

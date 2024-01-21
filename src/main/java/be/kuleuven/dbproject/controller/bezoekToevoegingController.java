@@ -68,7 +68,7 @@ public class bezoekToevoegingController{
     public void selecteerBetaalmethode(ActionEvent actionEvent) {
         String selected = selecteerBetaalmethode.getSelectionModel().getSelectedItem().toString();
         BetaalMethode betaalMethode = BetaalMethode.valueOf(selected);
-        System.out.println(betaalMethode);
+        //System.out.println(betaalMethode);
     }
 
     private void initTable(List<Boek> boeken) {
