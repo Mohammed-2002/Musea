@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="254.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.dbproject.controller.GameToevoegingController">
+    <children>
+        <ComboBox fx:id="selecteerConsole" layoutX="50.0" layoutY="157.0" onAction="#selecteerConsole" prefHeight="26.0" prefWidth="189.0" promptText="Selecteer console" />
+
+        <Text layoutX="50.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Geef de gegevens van de toe te voegen game in" textAlignment="CENTER" wrappingWidth="312.03125">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Text>
+        <TextField fx:id="naamField" layoutX="50.0" layoutY="52.0" promptText="Naam" />
+        <TextField fx:id="developerField" layoutX="50.0" layoutY="85.0" promptText="Developer" />
+
+        <!-- Centering the button horizontally -->
+        <Button fx:id="btnVoegToe" layoutX="306.0" layoutY="132.0" mnemonicParsing="false" text="Voeg Toe" />
+        <TextField fx:id="jaarField" layoutX="50.0" layoutY="120.0" promptText="Publicatiejaar" />
+        <TextField fx:id="waardeField" layoutX="50.0" layoutY="194.0" promptText="Waarde" />
+    </children>
+</AnchorPane>

@@ -46,13 +46,10 @@ public class ToonBoekenController{
     @FXML
     public Button btnDeleteBook;
 
-
-
     @FXML
     private TextField zoekBoekTextBar;
 
     SharedData sharedData = SharedData.getInstance();
-
 
     public void initialize() {
 
