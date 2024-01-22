@@ -30,7 +30,7 @@ public class ProjectMain extends Application {
 
         Scene scene = new Scene(root);
 
-        stage.setTitle("DAdministratie hoofdscherm TODO pas mij aan");
+        stage.setTitle("Log in");
         stage.setScene(scene);
         stage.show();
 
