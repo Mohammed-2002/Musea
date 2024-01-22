@@ -1,11 +1,7 @@
 package be.kuleuven.dbproject.controller;
 
-import be.kuleuven.dbproject.model.BetaalMethode;
-import be.kuleuven.dbproject.model.Boek;
-import be.kuleuven.dbproject.model.Game;
-import be.kuleuven.dbproject.repository.BoekRepository;
-import be.kuleuven.dbproject.repository.GameRepository;
-import be.kuleuven.dbproject.repository.MuseumRepository;
+import be.kuleuven.dbproject.model.*;
+import be.kuleuven.dbproject.repository.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,6 +88,73 @@ public class bezoekToevoegingController{
                 VoegBoekToeAanWinkelwagen();
             }
         });
+        btnSlaBezoekOp.setOnAction(e -> {
+            slaBezoekOp();
+        });
+
+
+
+    }
+
+    private void slaBezoekOp() {
+        try {
+
+            // Haal het bedrag op uit de tekstveld
+            Double bedrag = Double.valueOf(teBetalenBedrag.getText());
+
+            // Haal de geselecteerde betaalmethode op
+            BetaalMethode betaalMethode = (BetaalMethode) selecteerBetaalmethode.getValue();
+
+
+            // Controleer of een betaalmethode is geselecteerd
+            if (betaalMethode == null) {
+                showAlert("Fout", "Selecteer een betaalmethode");
+                return;
+            }
+
+            // Controleer op geldig bedrag
+            if (bedrag <= 0) {
+                showAlert("Fout", "Voer een geldig bedrag in");
+                return;
+            }
+
+            Bijdrage bijdrage = new Bijdrage(bedrag,betaalMethode);
+
+            sharedData.getBezoek().kenBijdragesToe(List.of(bijdrage));
+
+            BezoekerRepository bezoekerRepository = new BezoekerRepository(sharedData.getEntityManager());
+            BezoekRepository bezoekRepository = new BezoekRepository(sharedData.getEntityManager());
+            BijdrageRepository bijdrageRepository = new BijdrageRepository(sharedData.getEntityManager());
+            BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
+            GameRepository gameRepository = new GameRepository(sharedData.getEntityManager());
+            MedewerkerRepository medewerkerRepository = new MedewerkerRepository(sharedData.getEntityManager());
+            MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+
+            bezoekRepository.save(sharedData.getBezoek());
+            for(Boek boek: sharedData.getBezoek().getGeleendeBoeken() ){
+                boek.setUitgeleend(true);
+                boekRepository.update(boek);
+            }
+            for(Game game: sharedData.getBezoek().getGeleendeGames() ){
+                game.setUitgeleend(true);
+                gameRepository.update(game);
+            }
+
+            bezoekerRepository.update(sharedData.getBezoek().getBezoeker());
+            museumRepository.update(sharedData.getMuseum());
+
+            for(Bijdrage donatie: sharedData.getBezoek().getBijdragesTijdensBezoek() ){
+                bijdrageRepository.update(donatie);
+            }
+            // Voorbeeld: Toon een succesmelding
+            showAlert("Succes", "Betaling geslaagd");
+            initTableBoeken(sharedData.getMuseum().getBoeken());
+            initTableGames(sharedData.getMuseum().getGames());
+
+        } catch (NumberFormatException e) {
+            // Vang de uitzondering op als de invoer geen geldig getal is
+            showAlert("Fout", "Voer een geldig bedrag in");
+        }
 
     }
 
@@ -185,6 +248,9 @@ public class bezoekToevoegingController{
 
     private void initTableWinkelwagen(){
 
+        winkelwagenTableView.getItems().clear();
+        winkelwagenTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        winkelwagenTableView.getColumns().clear();
 
         int colIndex = 0;
         for (var colName : new String[]{"ID", "Naam", "Type"}) {
