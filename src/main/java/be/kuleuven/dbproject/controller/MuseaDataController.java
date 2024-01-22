@@ -93,10 +93,6 @@ public class MuseaDataController {
             }
         });
 
-        btnModify.setOnAction(e -> {
-            IsOneRowSelected();
-            modifyCurrentRow();
-        });
         btnDelete.setOnAction(e -> {
             IsOneRowSelected();
             deleteCurrentRow();
@@ -104,7 +100,7 @@ public class MuseaDataController {
 
         btnRegistreerBezoek.setOnAction(e -> {
             if(IsOneRowSelected()) {
-                registeerBezoek();
+                registreerBezoek();
             }
         });
         
@@ -180,7 +176,7 @@ public class MuseaDataController {
      * Maak een bezoekaan een museum aan
      * Hier kan men een bezoek registreren, een bijdrage toevoegen (betaalmethode), boek/spel geleend?
      */
-    private void registeerBezoek() {
+    private void registreerBezoek() {
         ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
         int museumID = Integer.parseInt(selectedRow.get(0));
         MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
@@ -192,7 +188,7 @@ public class MuseaDataController {
             var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("logInBezoeker.fxml"));
             var scene = new Scene(root);
             stage.setScene(scene);
-            stage.setTitle("Toevoeging van een bezoek");
+            stage.setTitle("Log in");
             stage.initOwner(ProjectMain.getRootStage());
             stage.initModality(Modality.WINDOW_MODAL);
             stage.show();
@@ -331,8 +327,6 @@ public class MuseaDataController {
             }
             initTable();
 
-    }
-    private void modifyCurrentRow() {
     }
 
     public void showAlert(String title, String content) {

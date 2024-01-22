@@ -1,5 +1,6 @@
 package be.kuleuven.dbproject.controller;
 
+import be.kuleuven.dbproject.ProjectMain;
 import be.kuleuven.dbproject.model.*;
 import be.kuleuven.dbproject.repository.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -7,8 +8,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class bezoekToevoegingController{
@@ -39,6 +46,16 @@ public class bezoekToevoegingController{
     private Button btnVoegBoek;
     @FXML
     private Button btnVoegGame;
+
+    @FXML
+    private Button btnReturnBoek;
+    @FXML
+    private Button btnReturnGame;
+    @FXML
+    private Button btnLogUit;
+
+    @FXML
+    private Button btnDeleteItem;
 
 
 
@@ -91,28 +108,90 @@ public class bezoekToevoegingController{
         btnSlaBezoekOp.setOnAction(e -> {
             slaBezoekOp();
         });
+        btnReturnGame.setOnAction(e -> {
+            if(isOneGameSelected()){
+                ObservableList<String> selectedRow = (ObservableList<String>) gameTableView.getSelectionModel().getSelectedItem();
+                int gameID = Integer.parseInt(selectedRow.get(0));
+                Game game = gameRepository.findById(gameID);
+                if(game.isUitgeleend()) {
+                    game.setUitgeleend(false);
+                    gameRepository.update(game);
+                    initTableGames(sharedData.getMuseum().getGames());
+                }else{
+                    showAlert("De game is al teruggebracht", "U probeert een game terug te brengen die al teruggebracht is");
+                }
+            }
+        });
+        btnReturnBoek.setOnAction(e -> {
+            if(isOneBoekSelected()){
+                ObservableList<String> selectedRow = (ObservableList<String>) boekTableView.getSelectionModel().getSelectedItem();
+                int boekID = Integer.parseInt(selectedRow.get(0));
+                Boek boek = boekRepository.findById(boekID);
+                if(boek.isUitgeleend()) {
+                    boek.setUitgeleend(false);
+                    boekRepository.update(boek);
+                    initTableBoeken(sharedData.getMuseum().getBoeken());
+                }else{
+                    showAlert("Het boek is al teruggebracht", "U probeert een boek terug te brengen die al teruggebracht is");
+                }
+
+            }
+        });
+
+        btnLogUit.setOnAction(e -> {
+            logUit();
+        });
+
+        btnDeleteItem.setOnAction(e -> {
+            if(isOneItemSelected()){
+                ObservableList<String> selectedRow = (ObservableList<String>) winkelwagenTableView.getSelectionModel().getSelectedItem();
+                int id = Integer.parseInt(selectedRow.get(0));
+                try {
+                    Game game = gameRepository.findById(id);
+                    sharedData.getBezoek().getGeleendeGames().remove(game);
+                } catch (NoResultException e1){
+                    Boek boek = boekRepository.findById(id);
+                    sharedData.getBezoek().getGeleendeBoeken().remove(boek);
+                }
+                initTableWinkelwagen();
+            }
+        });
+
 
 
 
     }
 
+    private void logUit() {
+        try {
+            Stage currentStage = (Stage) btnLogUit.getScene().getWindow();
+            currentStage.close();
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("logInBezoeker.fxml"));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Log in");
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Kan logInBezoeker.fxml niet vinden", e);
+        }
+    }
+
     private void slaBezoekOp() {
         try {
 
-            // Haal het bedrag op uit de tekstveld
             Double bedrag = Double.valueOf(teBetalenBedrag.getText());
 
-            // Haal de geselecteerde betaalmethode op
             BetaalMethode betaalMethode = (BetaalMethode) selecteerBetaalmethode.getValue();
 
 
-            // Controleer of een betaalmethode is geselecteerd
             if (betaalMethode == null) {
                 showAlert("Fout", "Selecteer een betaalmethode");
                 return;
             }
 
-            // Controleer op geldig bedrag
             if (bedrag <= 0) {
                 showAlert("Fout", "Voer een geldig bedrag in");
                 return;
@@ -146,13 +225,10 @@ public class bezoekToevoegingController{
             for(Bijdrage donatie: sharedData.getBezoek().getBijdragesTijdensBezoek() ){
                 bijdrageRepository.update(donatie);
             }
-            // Voorbeeld: Toon een succesmelding
             showAlert("Succes", "Betaling geslaagd");
-            initTableBoeken(sharedData.getMuseum().getBoeken());
-            initTableGames(sharedData.getMuseum().getGames());
+            logUit();
 
         } catch (NumberFormatException e) {
-            // Vang de uitzondering op als de invoer geen geldig getal is
             showAlert("Fout", "Voer een geldig bedrag in");
         }
 
@@ -278,6 +354,13 @@ public class bezoekToevoegingController{
             showAlert("Fout!", "Selecteer een game");
         }
         return !(gameTableView.getSelectionModel().getSelectedCells().size() == 0);
+    }
+
+    private boolean isOneItemSelected() {
+        if(winkelwagenTableView.getSelectionModel().getSelectedCells().size() == 0) {
+            showAlert("Fout!", "Selecteer een item vanuit uw winkelwagen");
+        }
+        return !(winkelwagenTableView.getSelectionModel().getSelectedCells().size() == 0);
     }
     private boolean isOneBoekSelected() {
         if(boekTableView.getSelectionModel().getSelectedCells().size() == 0) {
