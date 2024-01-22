@@ -72,7 +72,7 @@ public class GameToevoegingController {
 
                 museumRepository.update(sharedData.getMuseum());
 
-                showAlert("De game is toegevoegd.", "Het is toegevoegd aan de geselecteerde musea");
+                showAlert("De game is toegevoegd.", "Het is toegevoegd aan het geselecteerde museum");
                 Stage currentStage = (Stage) btnVoegToe.getScene().getWindow();
                 currentStage.close();
 
