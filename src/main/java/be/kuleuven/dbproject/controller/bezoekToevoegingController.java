@@ -3,7 +3,6 @@ package be.kuleuven.dbproject.controller;
 import be.kuleuven.dbproject.model.BetaalMethode;
 import be.kuleuven.dbproject.model.Boek;
 import be.kuleuven.dbproject.model.Game;
-import be.kuleuven.dbproject.model.Museum;
 import be.kuleuven.dbproject.repository.BoekRepository;
 import be.kuleuven.dbproject.repository.GameRepository;
 import be.kuleuven.dbproject.repository.MuseumRepository;
@@ -12,14 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class bezoekToevoegingController{
 
@@ -27,18 +21,10 @@ public class bezoekToevoegingController{
     public TableView boekTableView;
     @FXML
     public TableView gameTableView;
+
     @FXML
-    public TableColumn idBookTableColumn;
-    @FXML
-    public TableColumn naamBookTableColumn;
-    @FXML
-    public TableColumn auteurBookTableColumn;
-    @FXML
-    public TableColumn publicatiejaarBookTableColumn;
-    @FXML
-    public TableColumn uitgeverBookTableColumn;
-    @FXML
-    public TableColumn uitgeleendBookTableColumn;
+    public TableView winkelwagenTableView;
+
     @FXML
     private ComboBox selecteerBetaalmethode;
 
@@ -47,12 +33,24 @@ public class bezoekToevoegingController{
 
     @FXML
     private TextField zoekGameTextBar;
+    @FXML
+    private TextField teBetalenBedrag;
+
+    @FXML
+    private Button btnSlaBezoekOp;
+
+    @FXML
+    private Button btnVoegBoek;
+    @FXML
+    private Button btnVoegGame;
+
+
+
 
 
     SharedData sharedData = SharedData.getInstance();
 
-    ObservableList<Boek> boeklijsttable = FXCollections.observableArrayList();
-    ObservableList<Boek> gamelijsttable = FXCollections.observableArrayList();
+
 
 
     public void initialize() {
@@ -60,41 +58,91 @@ public class bezoekToevoegingController{
 
         selecteerBetaalmethode.setItems(list);
 
-        initTable(sharedData.getMuseum().getBoeken());
-        initTable2(sharedData.getMuseum().getGames());
+        initTableBoeken(sharedData.getMuseum().getBoeken());
+        initTableGames(sharedData.getMuseum().getGames());
 
         GameRepository gameRepository = new GameRepository(sharedData.getEntityManager());
         zoekGameTextBar.textProperty().addListener((observable, oldValue, newValue) ->{
             if (newValue.isEmpty() || newValue.isBlank() || newValue == null ){
-                initTable2(sharedData.getMuseum().getGames());
+                initTableGames(sharedData.getMuseum().getGames());
             }
             else{
-                initTable2(gameRepository.findByPartialNameInMuseum(newValue, sharedData.getMuseum()));
+                initTableGames(gameRepository.findByPartialNameInMuseum(newValue, sharedData.getMuseum()));
             }
         });
 
         BoekRepository boekRepository = new BoekRepository(sharedData.getEntityManager());
         zoekBoekTextBar.textProperty().addListener((observable, oldValue, newValue) ->{
             if (newValue.isEmpty() || newValue.isBlank() || newValue == null ){
-                initTable(sharedData.getMuseum().getBoeken());
+                initTableBoeken(sharedData.getMuseum().getBoeken());
             }
             else{
-                initTable(boekRepository.findByPartialNameInMuseum(newValue, sharedData.getMuseum()));
+                initTableBoeken(boekRepository.findByPartialNameInMuseum(newValue, sharedData.getMuseum()));
             }
         });
+
+        btnVoegGame.setOnAction(e -> {
+            if(isOneGameSelected()){
+                VoegGameToeAanWinkelwagen();
+            }
+        });
+
+        btnVoegBoek.setOnAction(e -> {
+            if(isOneBoekSelected()){
+                VoegBoekToeAanWinkelwagen();
+            }
+        });
+
+    }
+
+    private void VoegBoekToeAanWinkelwagen() {
+        ObservableList<String> selectedRow = (ObservableList<String>) boekTableView.getSelectionModel().getSelectedItem();
+
+
+            int boekID = Integer.parseInt(selectedRow.get(0));
+            BoekRepository boekRepository =new BoekRepository(sharedData.getEntityManager());
+            Boek boek = boekRepository.findById(boekID);
+            if(sharedData.getBezoek().getGeleendeBoeken().contains(boek)){
+                showAlert("boek is al in uw winkelwagen", "het geselecteerde boek ia al in uw winkelwagen");
+            }
+            else if(boek.isUitgeleend()){
+                showAlert("boek is uitgeleend", "het geselecteerde boek ia al uitgeleend");
+            }else {
+                sharedData.getBezoek().kenBoekenToe(List.of(boek));
+                initTableWinkelwagen();
+            }
+
+    }
+
+    private void VoegGameToeAanWinkelwagen() {
+
+        ObservableList<String> selectedRow = (ObservableList<String>) gameTableView.getSelectionModel().getSelectedItem();
+
+
+        int gameID = Integer.parseInt(selectedRow.get(0));
+        GameRepository gameRepository =new GameRepository(sharedData.getEntityManager());
+        Game game = gameRepository.findById(gameID);
+        if(sharedData.getBezoek().getGeleendeBoeken().contains(game)){
+            showAlert("game is al in uw winkelwagen", "het geselecteerde game ia al in uw winkelwagen");
+        }
+        else if(game.isUitgeleend()){
+            showAlert("game is uitgeleend", "het geselecteerde game ia al uitgeleend");
+        }else {
+            sharedData.getBezoek().kenGamesToe(List.of(game));
+            initTableWinkelwagen();
+        }
     }
 
 
     public void selecteerBetaalmethode(ActionEvent actionEvent) {
         String selected = selecteerBetaalmethode.getSelectionModel().getSelectedItem().toString();
         BetaalMethode betaalMethode = BetaalMethode.valueOf(selected);
-        //System.out.println(betaalMethode);
     }
 
-    private void initTable(List<Boek> boeken) {
+    private void initTableBoeken(List<Boek> boeken) {
 
         boekTableView.getItems().clear();
-        boekTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        boekTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         boekTableView.getColumns().clear();
 
         int colIndex = 0;
@@ -113,10 +161,10 @@ public class bezoekToevoegingController{
         }
     }
 
-    private void initTable2(List<Game> games) {
+    private void initTableGames(List<Game> games) {
 
         gameTableView.getItems().clear();
-        gameTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        gameTableView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         gameTableView.getColumns().clear();
 
         int colIndex = 0;
@@ -134,5 +182,52 @@ public class bezoekToevoegingController{
                     String.valueOf(games.get(i).isUitgeleend())));
         }
     }
+
+    private void initTableWinkelwagen(){
+
+
+        int colIndex = 0;
+        for (var colName : new String[]{"ID", "Naam", "Type"}) {
+            TableColumn<ObservableList<String>, String> col = new TableColumn<>(colName);
+            final int finalColIndex = colIndex;
+            col.setCellValueFactory(f -> new ReadOnlyObjectWrapper<>(f.getValue().get(finalColIndex)));
+            winkelwagenTableView.getColumns().add(col);
+            colIndex++;
+        }
+        List<Game> games= sharedData.getBezoek().getGeleendeGames();
+        List<Boek> boeken = sharedData.getBezoek().getGeleendeBoeken();
+        int aantalGames  = sharedData.getBezoek().getGeleendeGames().size();
+        int aantalBoeken = sharedData.getBezoek().getGeleendeBoeken().size();
+
+        for (int i = 0; i <= aantalGames - 1; i++) {
+            winkelwagenTableView.getItems().add(FXCollections.observableArrayList(String.valueOf(games.get(i).getGameID()), games.get(i).getNaam(), "Game"));
+        }
+        for (int i = 0; i <= aantalBoeken - 1; i++) {
+            winkelwagenTableView.getItems().add(FXCollections.observableArrayList(String.valueOf(boeken.get(i).getBoekID()), boeken.get(i).getNaam(), "Boek"));
+        }
+    }
+
+    private boolean isOneGameSelected() {
+        if(gameTableView.getSelectionModel().getSelectedCells().size() == 0) {
+            showAlert("Fout!", "Selecteer een game");
+        }
+        return !(gameTableView.getSelectionModel().getSelectedCells().size() == 0);
+    }
+    private boolean isOneBoekSelected() {
+        if(boekTableView.getSelectionModel().getSelectedCells().size() == 0) {
+            showAlert("Fout!", "Selecteer een boek");
+        }
+        return !(boekTableView.getSelectionModel().getSelectedCells().size() == 0);
+    }
+
+    public void showAlert(String title, String content) {
+        var alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+
 }
 

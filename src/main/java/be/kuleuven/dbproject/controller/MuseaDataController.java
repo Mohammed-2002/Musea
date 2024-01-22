@@ -96,8 +96,9 @@ public class MuseaDataController {
         });
 
         btnRegistreerBezoek.setOnAction(e -> {
-            IsOneRowSelected();
-            registeerBezoek();
+            if(IsOneRowSelected()) {
+                registeerBezoek();
+            }
         });
         
         btnClose.setOnAction(e -> {
@@ -302,7 +303,6 @@ public class MuseaDataController {
                 museumRepository.deleteByID(museumID);
             }
             initTable();
-            //refreshCurrentStage();
 
     }
     private void modifyCurrentRow() {

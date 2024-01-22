@@ -16,6 +16,6 @@
         <!-- Centering the buttons horizontally -->
         <Button fx:id="btnLogin" layoutX="125.0" layoutY="186.0" mnemonicParsing="false" text="Login" />
       <TextField fx:id="textID" layoutX="125.0" layoutY="102.0" promptText="ID" />
-      <Button layoutX="204.0" layoutY="186.0" mnemonicParsing="false" text="Registreer" />
+      <Button fx:id="btnRegistreer" layoutX="204.0" layoutY="186.0" mnemonicParsing="false" text="Registreer" />
     </children>
 </AnchorPane>

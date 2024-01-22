@@ -74,7 +74,6 @@ public class MedewerkerToevoegingController {
             Stage currentStage = (Stage) btnVoegToe.getScene().getWindow();
             currentStage.close();
         }
-
     }
 
     public static boolean isValidEmail(String email) {
