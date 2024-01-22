@@ -44,7 +44,7 @@
         </TableView>
 
       <TextField fx:id="zoekGameTextBar" layoutX="50.0" layoutY="345.0" promptText="Zoek naar game" />
-      <TextField fx:id="teBetalenBedrag" layoutX="50.0" layoutY="60.0" promptText="Te betalen bedrag" />
+      <TextField fx:id="teBetalenBedrag" layoutX="50.0" layoutY="60.0" prefHeight="25.0" prefWidth="189.0" promptText="Bedrag vrijblijvende bijdrage" />
       <Button fx:id="btnVoegBoek" layoutX="249.0" layoutY="151.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="243.0" text="Voeg boek aan winkel wagen toe" />
       <Button fx:id="btnVoegGame" layoutX="247.0" layoutY="345.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="243.0" text="Voeg Game aan winkelwagen toe" />
     </children>

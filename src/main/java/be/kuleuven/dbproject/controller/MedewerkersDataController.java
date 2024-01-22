@@ -26,8 +26,6 @@ public class MedewerkersDataController {
     @FXML
     private Button btnDelete;
     @FXML
-    private Button btnModify;
-    @FXML
     private Button btnClose;
     @FXML
     private TableView tblConfigs;
@@ -37,17 +35,10 @@ public class MedewerkersDataController {
     public void initialize() {
         if (!sharedData.getLoggedInMedewerker().isAdmin()) {
             btnDelete.setDisable(true);
-            btnModify.setDisable(true);
         }
 
         initTable(); //tabel laten zien
 
-
-
-        btnModify.setOnAction(e -> {
-            IsOneRowSelected();
-            modifyCurrentRow();
-        });
         btnDelete.setOnAction(e -> {
             IsOneRowSelected();
             deleteCurrentRow();
@@ -113,8 +104,7 @@ public class MedewerkersDataController {
         }
         initTable();
     }
-    private void modifyCurrentRow() {
-    }
+
 
     public void showAlert(String title, String content) {
         var alert = new Alert(Alert.AlertType.WARNING);

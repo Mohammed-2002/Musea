@@ -29,6 +29,8 @@ public class MuseaDataController {
     @FXML
     public Button btnToonBoeken;
     @FXML
+    public Button btnToonBezoeken;
+    @FXML
     private Button btnDelete;
     @FXML
     private Button btnAdd;
@@ -64,6 +66,11 @@ public class MuseaDataController {
         btnToonBoeken.setOnAction(e -> {
             IsOneRowSelected();
             toonBoeken();
+        });
+
+        btnToonBezoeken.setOnAction(e -> {
+            IsOneRowSelected();
+            toonBezoeken();
         });
 
         btnToonGames.setOnAction(e -> {
@@ -105,6 +112,26 @@ public class MuseaDataController {
             var stage = (Stage) btnClose.getScene().getWindow();
             stage.close();
         });
+    }
+
+    private void toonBezoeken() {
+        ObservableList<String> selectedRow = (ObservableList<String>) tblConfigs.getSelectionModel().getSelectedItem();
+        int museumID = Integer.parseInt(selectedRow.get(0));
+        MuseumRepository museumRepository = new MuseumRepository(sharedData.getEntityManager());
+        sharedData.setMuseum(museumRepository.findById(museumID));
+        try {
+            Stage currentStage = (Stage) btnAdd.getScene().getWindow();
+            var stage = new Stage();
+            var root = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("toonBezoeken.fxml"));
+            var scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Weergave van bezoeken");
+            stage.initOwner(ProjectMain.getRootStage());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.show();
+        } catch (Exception e) {
+            throw new RuntimeException("Kan toonBezoeken.fxml niet vinden", e);
+        }
     }
 
     private void toonBoeken() {

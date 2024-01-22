@@ -13,6 +13,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static org.hibernate.Hibernate.getClass;
+
 public class LogInBezoekerController {
 
     @FXML

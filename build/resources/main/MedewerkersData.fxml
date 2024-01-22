@@ -17,8 +17,6 @@
                 <Font name="System Bold Italic" size="13.0" />
             </font>
         </Text>
-        <Button fx:id="btnAdd" layoutX="16.0" layoutY="304.0" mnemonicParsing="false" text="Voeg medewerker toe" />
-        <Button fx:id="btnModify" layoutX="199.0" layoutY="304.0" mnemonicParsing="false" text="Bewerk" />
         <Button fx:id="btnClose" layoutX="520.0" layoutY="304.0" mnemonicParsing="false" text="Sluiten" />
         <Button fx:id="btnDelete" layoutX="431.0" layoutY="304.0" mnemonicParsing="false" text="Verwijder" />
     </children>
